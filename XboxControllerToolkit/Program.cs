@@ -60,13 +60,19 @@ namespace XboxControllerToolkit
                     """);
 
                 var (stateLeft, stateTop) = Console.GetCursorPosition();
+                var lastPacketNumber = int.MinValue;
                 while (true)
                 {
+
                     try
                     {
                         var state = controller.GetState();
-                        Console.SetCursorPosition(0, stateTop - 1);
-                        Console.Write($"""
+                        var packetNumber = state.PacketNumber;
+                        if (lastPacketNumber != packetNumber)
+                        {
+                            lastPacketNumber = packetNumber;
+                            Console.SetCursorPosition(0, stateTop - 1);
+                            Console.Write($"""
                             Real-time State: [{DateTime.Now:HH:mm:ss.fff}] [SN={state.PacketNumber,10}]
                                 {"Buttons",12} = {state.Gamepad.Buttons.ToString().Replace(" ", string.Empty),-80}
                                 {"LeftThumbX",12} = {state.Gamepad.LeftThumbX,-10}
@@ -76,6 +82,7 @@ namespace XboxControllerToolkit
                                 {"LeftTrigger",12} = {state.Gamepad.LeftTrigger,-5}
                                 {"RightTrigger",12} = {state.Gamepad.RightTrigger,-5}
                             """);
+                        }
                         Thread.Sleep(1);
                     }
                     catch (Exception ex)
@@ -86,6 +93,8 @@ namespace XboxControllerToolkit
                     }
                 }
                 Console.Read();
+            }
+            Console.Read();
             }
         }
     }
