@@ -94,8 +94,6 @@ namespace XboxControllerToolkit
                 }
                 Console.Read();
             }
-            Console.Read();
-            }
         }
     }
 }
